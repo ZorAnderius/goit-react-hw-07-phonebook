@@ -1,32 +1,20 @@
 import { Notification } from 'components/Notification/Notification';
 import contactListCSS from './ContactList.module.css';
-import { deleteContact } from 'redux/contactsSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { getContacts, getFilterQuery } from 'redux/selectors';
+import { useDispatch } from 'react-redux';
+import { deleteContactThunk } from 'redux/thunks';
+import propTypes from 'prop-types';
 
-export const ContactList = () => {
-  const contacts = useSelector(getContacts);
+export const ContactList = ({ contacts }) => {
   const dispatch = useDispatch();
 
-  const filterQuery = useSelector(getFilterQuery);
-
-  const checkSameContact = () => {
-    const normalaizedFilter = filterQuery.toLowerCase();
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalaizedFilter)
-    );
-  };
-
-  const filterList = checkSameContact();
-
   const onRemoveContact = contactID => {
-    dispatch(deleteContact(contactID));
+    dispatch(deleteContactThunk(contactID));
   };
 
-  const isFilterListEmpty = filterList.length;
-  return isFilterListEmpty ? (
+  const isContactsListEmpty = contacts?.length;
+  return isContactsListEmpty ? (
     <ul className={contactListCSS.contact_list}>
-      {filterList.map(({ id, name, number }) => (
+      {contacts.map(({ id, name, number }) => (
         <li key={id} className={contactListCSS.contact_item}>
           <div className={contactListCSS.contact_text_wrap}>
             <p className={contactListCSS.contact_name}>{name}</p>
@@ -44,4 +32,8 @@ export const ContactList = () => {
   ) : (
     <Notification message="No matches found" />
   );
+};
+
+ContactList.propTypes = {
+  contacts: propTypes.arrayOf(propTypes.shape).isRequired,
 };
