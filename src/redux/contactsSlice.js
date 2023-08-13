@@ -17,15 +17,7 @@ import {
 export const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
-  reducers: {
-    // addContact(state, { payload }) {
-    //   state.contactList = [...state.contactList, payload];
-    // },
-    // deleteContact(state, { payload }) {
-    //   const index = state.contactList.findIndex(task => task.id === payload);
-    //   state.contactList.splice(index, 1);
-    // },
-  },
+  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(fetchContactsThunk.fulfilled, handleFulfilledContacts)

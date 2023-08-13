@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import filterCSS from './Filter.module.css';
-import { getFilterQuery } from 'redux/selectors';
+import { selectFilterQuery } from 'redux/selectors';
 import { addFilterQuery } from 'redux/filterSlice';
 
 export const Filter = () => {
   const dispatch = useDispatch();
-  const value = useSelector(getFilterQuery);
+  const value = useSelector(selectFilterQuery);
 
   const onChangeFilterValue = e =>
     dispatch(addFilterQuery(e.currentTarget.value));

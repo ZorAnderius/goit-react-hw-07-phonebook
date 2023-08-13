@@ -8,14 +8,15 @@ import appCSS from './App.module.css';
 
 import { Notification } from './Notification/Notification';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterContacts, getContacts } from 'redux/selectors';
+import { filterContacts, selectContacts } from 'redux/selectors';
 import { addContactThunk, fetchContactsThunk } from 'redux/thunks';
 import { Loader } from './Loader/Loader';
 import { Error } from './Error/Error';
 import { ScrollUp } from './ScrollUp/ScrollUp';
 
 export const App = () => {
-  const { items, isLoading, error } = useSelector(getContacts);
+  const { isLoading, error } = useSelector(selectContacts);
+  const filterList = useSelector(filterContacts);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export const App = () => {
   }, [dispatch]);
 
   const addContact = body => {
-    const isInclude = items.find(
+    const isInclude = filterList.find(
       ({ name }) => name.toLowerCase() === body.name.toLowerCase()
     );
 
@@ -35,8 +36,6 @@ export const App = () => {
       dispatch(addContactThunk(body));
     }
   };
-
-  const filterList = useSelector(filterContacts);
 
   return (
     <div className={appCSS.main_container}>
@@ -57,7 +56,7 @@ export const App = () => {
           <Filter />
           {isLoading ? (
             <Loader />
-          ) : items?.length ? (
+          ) : filterList?.length ? (
             <ContactList contacts={filterList} />
           ) : (
             <Notification message="Phonebook is empty" />
